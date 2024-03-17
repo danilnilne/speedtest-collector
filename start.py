@@ -76,7 +76,7 @@ def db_save_result(data, **db_config):
 
         query = ("INSERT INTO speedtest (id, result) "
                  "VALUES (%s, %s)")
-        values = ('CURRENT_TIMESTAMP', data)
+        values = ('CURRENT_TIMESTAMP', str(data))
 
         print(query, values)
         cursor.execute(query, values)
@@ -107,7 +107,7 @@ if __name__ == "__main__":
     while True:
         print("debug: in 'While' loop")
         try:
-            data = speedcheck.get_results()
+            data = speedcheck.get_results('json')
             print(data)
             db_save_result(data, **db_config)
             print("debug: Saved to db")
