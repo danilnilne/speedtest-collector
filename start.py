@@ -30,11 +30,13 @@ class Speedcheck():
         if self.format == "csv":
             return self.attempt.results.csv()
 
+
 def init_config() -> dict[str, any]:
+    pass
 
 
 if __name__ == "__main__":
-    db_config = {}
+    print("WORK")
 
     """
     while True:
