@@ -96,7 +96,8 @@ if __name__ == "__main__":
 
     while True:
         try:
-            data = speedcheck.get_results('json')
+            # data = speedcheck.get_results('json')
+            data = ("dome")
             print("ST result type: %s" % type(data))
             db_save_result(data, **db_config)
         except Exception as speedcheck_results:
