@@ -11,16 +11,20 @@ class ScriptExeption(Exception):
 
 class Speedcheck():
 
-    def __init__(self, format=None) -> None:
-        self.format = format
+    def __init__(self) -> None:
         try:
             self.attempt = speedtest.Speedtest()
-            self.attempt.download()
-            self.attempt.upload()
         except Exception as init_speedtest_error:
             raise ScriptExeption(init_speedtest_error)
 
-    def get_results(self):
+    def _test(self):
+        self.attempt.get_best_server()
+        self.attempt.download()
+        self.attempt.upload()
+
+    def get_results(self, format=None):
+        self.format = format
+        self._test()
         if self.format is None:
             return self.attempt.results
         if self.format == "dict":
