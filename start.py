@@ -70,9 +70,9 @@ def db_save_result(data, **db_config):
 
     try:
         cursor = db.cursor
-        query = ("INSERT INTO speedtest (id, result) "
-                 "VALUES (%s, %s)")
-        values = (time.time(), str(data))
+        query = ("INSERT INTO speedtest (result) "
+                 "VALUES (%s)")
+        values = (str(data))
         cursor.execute(query, values)
         db.commit()
     except Exception as db_cursor_error:
