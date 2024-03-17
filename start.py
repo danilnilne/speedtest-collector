@@ -1,4 +1,5 @@
 import speedtest
+import logging
 import time
 import os
 from database import Database
@@ -6,8 +7,8 @@ from database import Database
 
 app_config: dict = {}
 db_config: dict = {}
-
 DEFAULT_DELAY = 120
+logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
 
 
 class ScriptExeption(Exception):
@@ -71,14 +72,9 @@ def db_save_result(data, **db_config):
 
     try:
         cursor = db.cursor
-        #query = ('INSERT INTO %s (id, result) VALUES '
-        #         '(CURRENT_TIMESTAMP, (%s))' % (app_config['table'], data))
-
         query = ("INSERT INTO speedtest (id, result) "
                  "VALUES (%s, %s)")
         values = (time.time(), str(data))
-
-        print(query, values)
         cursor.execute(query, values)
         db.commit()
     except Exception as db_cursor_error:
@@ -92,28 +88,23 @@ if __name__ == "__main__":
 
     try:
         init_config()
-        print("debug: Init config completed")
     except Exception as init_config_error:
-        print("Config init error: %s" % init_config_error)
+        logging.error("Config init error: %s", init_config_error)
         exit(1)
 
     try:
         speedcheck = Speedcheck()
-        print("debug: Iinit DB completed")
     except Exception as speedcheck_init_error:
-        print("Exit due to: %s" % speedcheck_init_error)
+        logging.error("Exit due to: %s", speedcheck_init_error)
         exit(1)
 
     while True:
-        print("debug: in 'While' loop")
         try:
             data = speedcheck.get_results('json')
-            print(type(data))
-            print(data)
+            logging.debug("ST result type: %s", type(data))
             db_save_result(data, **db_config)
-            print("debug: Saved to db")
         except Exception as speedcheck_results:
-            print("Error while serve Speedtest results: %s"
-                  % speedcheck_results)
+            logging.error("Error while serve Speedtest results: %s",
+                          speedcheck_results)
             exit(1)
         time.sleep(app_config['delay'])
