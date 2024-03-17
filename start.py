@@ -100,4 +100,5 @@ if __name__ == "__main__":
         except Exception as speedcheck_results:
             print("Error while serve Speedtest results: %s"
                   % speedcheck_results)
+            exit(1)
         time.sleep(int(app_config['delay']))
