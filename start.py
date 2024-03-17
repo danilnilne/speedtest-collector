@@ -3,6 +3,10 @@ import time
 import os
 from database import Database
 
+
+app_config: dict = {}
+db_config: dict = {}
+
 DEFAULT_DELAY = 120
 
 
@@ -38,22 +42,23 @@ class Speedcheck():
 
 def init_config() -> list[dict]:
 
-    app_config: dict = {
-        'delay': int(os.getenv('DELAY'))
-    }
-    db_config: dict = {
+    app_config.update({
+        'delay': int(os.getenv('DELAY', DEFAULT_DELAY)),
+        'table': os.getenv('DB_TABLE', 'speedtest')
+    })
+
+    db_config.update({
         'user': os.getenv('DB_USER'),
         'password': os.getenv('DB_PASSWORD'),
         'host': os.getenv('DB_HOST'),
         'database': os.getenv('DB_DATABASE'),
-        'raise_on_warnings': bool(os.getenv('DB_RAISE_ON_WARN')),
-        'table':  os.getenv('DB_TABLE')
-    }
+        'raise_on_warnings': bool(os.getenv('DB_RAISE_ON_WARN', ''))
+    })
+
     for key, value in db_config.items():
         if value is None:
             raise ScriptExeption('DB variable is empty: %s: \'%s\''
                                  % (key, value))
-    return app_config, db_config
 
 
 def db_save_result(result, **db_config):
@@ -81,7 +86,7 @@ def db_save_result(result, **db_config):
 if __name__ == "__main__":
 
     try:
-        app_config, db_config = init_config()
+        init_config()
         print("debug: Init config completed")
     except Exception as init_config_error:
         print("Config init error: %s" % init_config_error)
