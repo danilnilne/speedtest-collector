@@ -38,9 +38,6 @@ class Speedcheck():
 
 def init_config() -> list[dict]:
 
-    for key, value in os.environ.items():
-        print(f'{key}: {value}')
-
     app_config: dict = {
         'delay': os.getenv('DELAY')
     }
@@ -58,10 +55,10 @@ def init_config() -> list[dict]:
     return app_config, db_config
 
 
-def save_result(db_config, result):
+def save_result(result, **db_config):
 
     try:
-        db = Database(db_config)
+        db = Database(**db_config)
     except Exception as db_init_error:
         raise ScriptExeption('Unable to make connection to DB due to: %s'
                              % db_init_error)
@@ -102,4 +99,4 @@ if __name__ == "__main__":
         except Exception as speedcheck_results:
             print("Error while serve Speedtest results: %s"
                   % speedcheck_results)
-        time.sleep(DEFAULT_DELAY)
+        time.sleep(app_config['delay'])
