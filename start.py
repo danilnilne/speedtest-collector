@@ -1,5 +1,4 @@
 import speedtest
-import logging
 import time
 import os
 from database import Database
@@ -8,7 +7,6 @@ from database import Database
 app_config: dict = {}
 db_config: dict = {}
 DEFAULT_DELAY = 600
-logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
 
 
 class ScriptExeption(Exception):
@@ -89,22 +87,22 @@ if __name__ == "__main__":
     try:
         init_config()
     except Exception as init_config_error:
-        logging.error("Config init error: %s", init_config_error)
+        print("Config init error: %s" % init_config_error)
         exit(1)
 
     try:
         speedcheck = Speedcheck()
     except Exception as speedcheck_init_error:
-        logging.error("Exit due to: %s", speedcheck_init_error)
+        print("Exit due to: %s" % speedcheck_init_error)
         exit(1)
 
     while True:
         try:
             data = speedcheck.get_results('json')
-            logging.debug("ST result type: %s", type(data))
+            print("ST result type: %s" % type(data))
             db_save_result(data, **db_config)
         except Exception as speedcheck_results:
-            logging.error("Error while serve Speedtest results: %s",
-                          speedcheck_results)
+            print("Error while serve Speedtest results: %s"
+                  % speedcheck_results)
             exit(1)
         time.sleep(app_config['delay'])
