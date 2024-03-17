@@ -38,6 +38,9 @@ class Speedcheck():
 
 def init_config() -> list[dict]:
 
+    for key, value in os.environ.items():
+        print(f'{key}: {value}')
+
     app_config: dict = {
         'delay': os.getenv('DELAY')
     }
