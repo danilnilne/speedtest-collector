@@ -41,9 +41,6 @@ class Speedcheck():
 
 def init_config() -> list[dict]:
 
-    for key, value in os.environ.items():
-        print(f"{key}: {value}")
-
     app_config.update({
         'delay': int(os.getenv('DELAY', DEFAULT_DELAY)),
         'table': os.getenv('DB_TABLE', 'speedtest')
@@ -51,21 +48,17 @@ def init_config() -> list[dict]:
 
     db_config.update({
         'user': os.getenv('DB_USER', 'danil'),
-        'password': os.getenv('DB_PASSWORD', ''),
-        'host': os.getenv('DB_HOST', 'test.host'),
-        'database': os.getenv('DB_DATABASE', 'test_db')
+        'password': os.getenv('DB_PASSWORD', 'mysqlDanil911password#!'),
+        'host': os.getenv('DB_HOST', 'docker.home.danilnilne.ru'),
+        'database': os.getenv('DB_DATABASE', 'danilnilne_db')
     })
 
     for key, value in db_config.items():
         if value is None:
-            raise ScriptExeption('DB variable is empty: %s: \'%s\''
-                                 % (key, value))
+            raise ScriptExeption('DB variable is empty: %s: %s' % (key, value))
 
 
 def db_save_result(data, **db_config):
-
-    for key, value in db_config.items():
-        print(f"{key}: {value}")
 
     try:
         db = Database(**db_config)
@@ -75,8 +68,11 @@ def db_save_result(data, **db_config):
 
     try:
         cursor = db.cursor
-        query = (f"INSERT INTO {app_config['table']} (result) VALUES ({data})")
-        cursor.execute(query)
+        query = ("INSERT INTO speedtest "
+                 "(result) "
+                 "VALUES (%s)")
+        values = (data, )
+        cursor.execute(query, values)
         db.commit()
     except Exception as db_cursor_error:
         raise ScriptExeption("Unable to work with DB cursor due to: %s"
@@ -86,10 +82,7 @@ def db_save_result(data, **db_config):
 
 
 if __name__ == "__main__":
-    while True:
-        print("Working")
-        time.sleep(5)
-"""
+
     try:
         init_config()
     except Exception as init_config_error:
@@ -104,13 +97,10 @@ if __name__ == "__main__":
 
     while True:
         try:
-            # data = speedcheck.get_results('json')
-            data = ("dome")
-            print("ST result type: %s" % type(data))
+            data = speedcheck.get_results("json")
             db_save_result(data, **db_config)
         except Exception as speedcheck_results:
             print("Error while serving Speedtest results: %s"
                   % speedcheck_results)
             exit(1)
         time.sleep(app_config['delay'])
-"""
