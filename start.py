@@ -73,7 +73,7 @@ def db_save_result(result, **db_config):
         cursor = db.cursor
         query = ("INSERT INTO `%s` (`id`, `result`) "
                  "VALUES (CURRENT_TIMESTAMP, %s)"
-                 % (db_config['table'], result))
+                 % (app_config['table'], result))
         cursor.execute(query)
         db.commit()
     except Exception as db_cursor_error:
