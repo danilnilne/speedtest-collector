@@ -39,14 +39,15 @@ class Speedcheck():
 def init_config() -> list[dict]:
 
     app_config: dict = {
-        'delay': int(os.getenv('DELAY'))
+        'delay': os.getenv('DELAY')
     }
     db_config: dict = {
         'db_user': os.getenv('DB_USER'),
         'db_password': os.getenv('DB_PASSWORD'),
         'db_host': os.getenv('DB_HOST'),
         'db_database': os.getenv('DB_DATABASE'),
-        'db_raise_on_warnings': os.getenv('DB_RAISE_ON_WARN')
+        'db_raise_on_warnings': os.getenv('DB_RAISE_ON_WARN'),
+        'table':  os.getenv('DB_TABLE') 
     }
     for key, value in db_config.items():
         if value is None:
@@ -67,7 +68,7 @@ def db_save_result(result, **db_config):
         cursor = db.cursor
         query = ("INSERT INTO `%s` (`id`, `result`) "
                  "VALUES (CURRENT_TIMESTAMP, %s)"
-                 % (db_config['db_database'], result))
+                 % (db_config['table'], result))
         cursor.execute(query)
         db.commit()
     except Exception as db_cursor_error:
@@ -99,4 +100,4 @@ if __name__ == "__main__":
         except Exception as speedcheck_results:
             print("Error while serve Speedtest results: %s"
                   % speedcheck_results)
-        time.sleep(app_config['delay'])
+        time.sleep(int(app_config['delay']))
