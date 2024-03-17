@@ -7,7 +7,7 @@ from database import Database
 
 app_config: dict = {}
 db_config: dict = {}
-DEFAULT_DELAY = 120
+DEFAULT_DELAY = 600
 logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
 
 
