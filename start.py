@@ -64,10 +64,6 @@ def init_config() -> list[dict]:
 
 def db_save_result(data, **db_config):
 
-    response = os.system("ping -c 5 " + db_config['host'])
-
-    print(response)
-
     for key, value in db_config.items():
         print(f"{key}: {value}")
 
@@ -90,7 +86,10 @@ def db_save_result(data, **db_config):
 
 
 if __name__ == "__main__":
-
+    while True:
+        print("Working")
+        time.sleep(5)
+"""
     try:
         init_config()
     except Exception as init_config_error:
@@ -114,3 +113,4 @@ if __name__ == "__main__":
                   % speedcheck_results)
             exit(1)
         time.sleep(app_config['delay'])
+"""
