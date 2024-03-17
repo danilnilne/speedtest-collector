@@ -76,7 +76,7 @@ def db_save_result(data, **db_config):
 
         query = ("INSERT INTO speedtest (id, result) "
                  "VALUES (%s, %s)")
-        values = (time.time_ns(), str(data))
+        values = (time.time(), str(data))
 
         print(query, values)
         cursor.execute(query, values)
