@@ -70,10 +70,8 @@ def db_save_result(data, **db_config):
 
     try:
         cursor = db.cursor
-        query = ("INSERT INTO speedtest (result) "
-                 "VALUES (%s)")
-        values = (str(data))
-        cursor.execute(query, values)
+        query = (f"INSERT INTO {app_config['table']} (result) VALUES ({data})")
+        cursor.execute(query)
         db.commit()
     except Exception as db_cursor_error:
         raise ScriptExeption("Unable to work with DB cursor due to: %s"
