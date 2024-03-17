@@ -108,6 +108,7 @@ if __name__ == "__main__":
         print("debug: in 'While' loop")
         try:
             data = speedcheck.get_results('json')
+            print(type(data))
             print(data)
             db_save_result(data, **db_config)
             print("debug: Saved to db")
