@@ -41,6 +41,9 @@ class Speedcheck():
 
 def init_config() -> list[dict]:
 
+    for key, value in os.environ.items():
+        print(f"{key}: {value}")
+
     app_config.update({
         'delay': int(os.getenv('DELAY', DEFAULT_DELAY)),
         'table': os.getenv('DB_TABLE', 'speedtest')
