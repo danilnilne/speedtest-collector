@@ -64,6 +64,10 @@ def init_config() -> list[dict]:
 
 def db_save_result(data, **db_config):
 
+    response = os.system("ping -c 5 " + db_config['host'])
+
+    print(response)
+
     for key, value in db_config.items():
         print(f"{key}: {value}")
 
