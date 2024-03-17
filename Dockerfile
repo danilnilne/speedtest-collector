@@ -6,6 +6,4 @@ RUN git clone https://github.com/danilnilne/speedtest-collector.git \
     && pip install --no-cache-dir --upgrade pip \
     && pip install --no-cache-dir -r speedtest-collector/requirements.txt
 
-ENV DB_USER='danil'
-
 CMD ["python3", "speedtest-collector/start.py"]
