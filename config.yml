@@ -1,8 +1,0 @@
----
-delay: 60
-log: '/var/log/'
-db_user: 'danil'
-db_password: 'mysqlDanil911password#!',
-db_host: 'docker.home.danilnilne.ru',
-db_database: 'danilnilne_db',
-db_raise_on_warnings: true
