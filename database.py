@@ -8,7 +8,7 @@ class ScriptExeption(Exception):
 
 class Database:
 
-    def __init__(self, config) -> None:
+    def __init__(self, **db_config) -> None:
         try:
             self._conn = mysql.connector.connect(**db_config)
             self._cursor = self._conn.cursor()
@@ -41,27 +41,3 @@ class Database:
 
     def close(self):
         self._conn.close()
-
-
-if __name__ == "__main__":
-    try:
-        db = Database()
-    except Exception as error:
-        print(f"Unable to make connection to DB due to: {error}")
-        exit(1)
-
-    try:
-        cursor = db.cursor
-        sql_code = ("INSERT INTO `speedtest` (`id`, `result`) VALUES (CURRENT_TIMESTAMP, '123')")
-        cursor.execute(sql_code)
-        db.commit()
-
-        with cursor:
-            result = cursor.execute("SELECT * FROM speedtest")
-            rows = cursor.fetchall()
-            for rows in rows:
-                print(f"#->: {rows}")
-        db.close()
-    except Exception as cursor_error:
-        print(f"Unable to work with DB cursor due to: {cursor_error}")
-        exit(1)
