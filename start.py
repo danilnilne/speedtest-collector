@@ -42,11 +42,11 @@ def init_config() -> list[dict]:
         'delay': os.getenv('DELAY')
     }
     db_config: dict = {
-        'db_user': os.getenv('DB_USER'),
-        'db_password': os.getenv('DB_PASSWORD'),
-        'db_host': os.getenv('DB_HOST'),
-        'db_database': os.getenv('DB_DATABASE'),
-        'db_raise_on_warnings': os.getenv('DB_RAISE_ON_WARN'),
+        'user': os.getenv('DB_USER'),
+        'password': os.getenv('DB_PASSWORD'),
+        'host': os.getenv('DB_HOST'),
+        'database': os.getenv('DB_DATABASE'),
+        'raise_on_warnings': os.getenv('DB_RAISE_ON_WARN'),
         'table':  os.getenv('DB_TABLE') 
     }
     for key, value in db_config.items():
