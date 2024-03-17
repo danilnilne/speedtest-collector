@@ -39,7 +39,7 @@ class Speedcheck():
 def init_config() -> list[dict]:
 
     app_config: dict = {
-        'delay': os.getenv('DELAY')
+        'delay': int(os.getenv('DELAY'))
     }
     db_config: dict = {
         'db_user': os.getenv('DB_USER'),
