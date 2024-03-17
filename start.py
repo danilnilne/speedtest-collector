@@ -47,11 +47,11 @@ def init_config() -> list[dict]:
     })
 
     db_config.update({
-        'user': os.getenv('DB_USER'),
-        'password': os.getenv('DB_PASSWORD'),
-        'host': os.getenv('DB_HOST'),
-        'database': os.getenv('DB_DATABASE'),
-        'raise_on_warnings': bool(os.getenv('DB_RAISE_ON_WARN', ''))
+        'user': os.getenv('DB_USER', 'danil'),
+        'password': os.getenv('DB_PASSWORD', ''),
+        'host': os.getenv('DB_HOST', 'test.host'),
+        'database': os.getenv('DB_DATABASE', 'test_db'),
+        'raise_on_warnings': bool(os.getenv('DB_RAISE_ON_WARN', True))
     })
 
     for key, value in db_config.items():
@@ -100,7 +100,7 @@ if __name__ == "__main__":
             print("ST result type: %s" % type(data))
             db_save_result(data, **db_config)
         except Exception as speedcheck_results:
-            print("Error while serve Speedtest results: %s"
+            print("Error while serving Speedtest results: %s"
                   % speedcheck_results)
             exit(1)
         time.sleep(app_config['delay'])
