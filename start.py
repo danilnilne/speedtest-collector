@@ -45,8 +45,6 @@ def init_config() -> list[dict]:
         'delay': int(os.getenv('DELAY', DEFAULT_DELAY)),
         'table': os.getenv('DB_TABLE', 'speedtest')
     })
-    print("Results will be collected once per %s seconds"
-          % app_config['delay'])
 
     db_config.update({
         'user': os.getenv('DB_USER', 'danil'),
