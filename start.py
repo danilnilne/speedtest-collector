@@ -61,7 +61,7 @@ def init_config() -> list[dict]:
                                  % (key, value))
 
 
-def db_save_result(result, **db_config):
+def db_save_result(data, **db_config):
 
     try:
         db = Database(**db_config)
@@ -72,7 +72,7 @@ def db_save_result(result, **db_config):
     try:
         cursor = db.cursor
         query = ('INSERT INTO `%s` (`id`, `result`) VALUES '
-                 '(CURRENT_TIMESTAMP, `%s`)' % (app_config['table'], result))
+                 '(CURRENT_TIMESTAMP, %s)' % (app_config['table'], data))
         print(query)
         cursor.execute(query)
         db.commit()
@@ -102,9 +102,9 @@ if __name__ == "__main__":
     while True:
         print("debug: in 'While' loop")
         try:
-            result = speedcheck.get_results()
-            print(result)
-            db_save_result(result, **db_config)
+            data = speedcheck.get_results()
+            print(data)
+            db_save_result(data, **db_config)
             print("debug: Saved to db")
         except Exception as speedcheck_results:
             print("Error while serve Speedtest results: %s"
