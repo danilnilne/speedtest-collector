@@ -2,7 +2,7 @@ import speedtest
 import os
 import time
 
-DEFAULT_DELAY = 600
+DEFAULT_DELAY = 120
 
 
 class ScriptExeption(Exception):
@@ -36,27 +36,17 @@ def init_config() -> dict[str, any]:
 
 
 if __name__ == "__main__":
-    print("WORK")
 
-    """
+    try:
+        speedcheck = Speedcheck()
+    except Exception as speedcheck_init_error:
+        print("Exit due to: %s" % speedcheck_init_error)
+        exit(1)
+
     while True:
-        if not config:
-            try:
-                config = Config('config.yml')
-            except Exception as init_config_error:
-                print(f"ERROR: {init_config_error}")
-        else:
-            try:
-                st = Speedcheck()
-                # Save results to db /file
-                print(st.get_results())
-            except Exception as work_line_error:
-                print(f"ERROR: {work_line_error}")
-
         try:
-            config.delay
-        except AttributeError:
-            config.add_setting("delay", DEFAULT_DELAY)
-
-        time.sleep(config.delay)
-    """
+            print(speedcheck.get_results())
+        except Exception as speedcheck_get_results:
+            print("Error while getting Speedtest results: %s"
+                  % speedcheck_get_results)
+        time.sleep(DEFAULT_DELAY)
