@@ -82,21 +82,25 @@ if __name__ == "__main__":
 
     try:
         app_config, db_config = init_config()
+        print("debug: Init config completed")
     except Exception as init_config_error:
         print("Config init error: %s" % init_config_error)
         exit(1)
 
     try:
         speedcheck = Speedcheck()
+        print("debug: Iinit DB completed")
     except Exception as speedcheck_init_error:
         print("Exit due to: %s" % speedcheck_init_error)
         exit(1)
 
     while True:
+        print("debug: in 'While' loop")
         try:
             result = speedcheck.get_results()
             print(result)
             db_save_result(result, **db_config)
+            print("debug: Saved to db")
         except Exception as speedcheck_results:
             print("Error while serve Speedtest results: %s"
                   % speedcheck_results)
