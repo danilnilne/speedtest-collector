@@ -55,7 +55,7 @@ def init_config() -> list[dict]:
     return app_config, db_config
 
 
-def save_result(result, **db_config):
+def db_save_result(result, **db_config):
 
     try:
         db = Database(**db_config)
@@ -95,7 +95,7 @@ if __name__ == "__main__":
         try:
             result = speedcheck.get_results()
             print(result)
-            save_result(db_config, result)
+            db_save_result(result, **db_config)
         except Exception as speedcheck_results:
             print("Error while serve Speedtest results: %s"
                   % speedcheck_results)
