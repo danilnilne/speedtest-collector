@@ -64,6 +64,9 @@ def init_config() -> list[dict]:
 
 def db_save_result(data, **db_config):
 
+    for key, value in db_config.items():
+        print(f"{key}: {value}")
+
     try:
         db = Database(**db_config)
     except Exception as db_init_error:
