@@ -50,8 +50,7 @@ def init_config() -> list[dict]:
         'user': os.getenv('DB_USER', 'danil'),
         'password': os.getenv('DB_PASSWORD', ''),
         'host': os.getenv('DB_HOST', 'test.host'),
-        'database': os.getenv('DB_DATABASE', 'test_db'),
-        'raise_on_warnings': bool(os.getenv('DB_RAISE_ON_WARN', True))
+        'database': os.getenv('DB_DATABASE', 'test_db')
     })
 
     for key, value in db_config.items():
