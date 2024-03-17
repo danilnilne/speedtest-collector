@@ -71,7 +71,7 @@ def db_save_result(data, **db_config):
 
     try:
         cursor = db.cursor
-        query = ('INSERT INTO `%s` (`id`, `result`) VALUES '
+        query = ('INSERT INTO %s (id, result) VALUES '
                  '(CURRENT_TIMESTAMP, %s)' % (app_config['table'], data))
         print(query)
         cursor.execute(query)
