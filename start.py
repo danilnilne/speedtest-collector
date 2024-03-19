@@ -1,16 +1,36 @@
 import speedtest
 import time
+import yaml
 import os
 from database import Database
 
-
-app_config: dict = {}
 db_config: dict = {}
-DEFAULT_DELAY = 600
+DEFAULT_DELAY = 3600
 
 
 class ScriptExeption(Exception):
     pass
+
+
+class Config:
+    """Bot config base class """
+
+    def __init__(self, filename):
+        """Init config, set attributes """
+
+        config = os.path.dirname(os.path.abspath(__file__)) + "/" + filename
+        with open(config, 'r') as config:
+            settings = yaml.safe_load(config)
+
+        if not settings:
+            raise ScriptExeption("Config file empty or has wrong format")
+
+        for key, value in settings.items():
+            setattr(self, key, value)
+
+    def add_setting(self, key, value):
+        """ Add setting to config """
+        setattr(self, key, value)
 
 
 class Speedcheck():
@@ -39,25 +59,6 @@ class Speedcheck():
             return self.attempt.results.csv()
 
 
-def init_config() -> list[dict]:
-
-    app_config.update({
-        'delay': int(os.getenv('DELAY', DEFAULT_DELAY)),
-        'table': os.getenv('DB_TABLE', 'speedtest')
-    })
-
-    db_config.update({
-        'user': os.getenv('DB_USER', 'danil'),
-        'password': os.getenv('DB_PASSWORD', 'mysqlDanil911password#!'),
-        'host': os.getenv('DB_HOST', 'docker.home.danilnilne.ru'),
-        'database': os.getenv('DB_DATABASE', 'danilnilne_db')
-    })
-
-    for key, value in db_config.items():
-        if value is None:
-            raise ScriptExeption('DB variable is empty: %s: %s' % (key, value))
-
-
 def db_save_result(data, **db_config):
 
     try:
@@ -83,11 +84,21 @@ def db_save_result(data, **db_config):
 
 if __name__ == "__main__":
 
+    config: Config = None
     try:
-        init_config()
-    except Exception as init_config_error:
-        print("Config init error: %s" % init_config_error)
-        exit(1)
+        config = Config('config.yml')
+    except Exception as read_config_error:
+        print("Config read error: %s" % read_config_error)
+
+    for key, value in config.__dict__.items():
+        if 'db_' in key:
+            db_config.update({key.split('_')[1]: value})
+        if value is None:
+            print('DB variable is empty: %s: %s' % (key, value))
+            exit(1)
+
+    if not config.delay:
+        config.add_setting('delay', DEFAULT_DELAY)
 
     try:
         speedcheck = Speedcheck()
@@ -97,11 +108,10 @@ if __name__ == "__main__":
 
     while True:
         try:
-            print('Test')
-            data = speedcheck.get_results("json")
+            data = speedcheck.get_results('json')
             db_save_result(data, **db_config)
         except Exception as speedcheck_results:
             print("Error while serving Speedtest results: %s"
                   % speedcheck_results)
             exit(1)
-        time.sleep(app_config['delay'])
+        time.sleep(config.delay)
