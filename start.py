@@ -44,6 +44,9 @@ class Config:
         for key, value in settings.items():
             setattr(self, key, value)
 
+        print("DEBUG: Config file has been read")
+        logger.info('LOGGER: Config file has been read')
+
     def add_setting(self, key, value):
         """ Add setting to config """
         setattr(self, key, value)
@@ -73,6 +76,8 @@ class Speedcheck():
             return self.attempt.results.json()
         if self.format == "csv":
             return self.attempt.results.csv()
+        print("DEBUG: Speedtest result collected")
+        logger.info('LOGGER: Speedtest result collected')
 
 
 def db_save_result(data, **db_config):
