@@ -97,6 +97,7 @@ if __name__ == "__main__":
 
     while True:
         try:
+            print('Test')
             data = speedcheck.get_results("json")
             db_save_result(data, **db_config)
         except Exception as speedcheck_results:
