@@ -1,7 +1,7 @@
 ---
 delay: 300
 # MySQL db connection variables
-db_user: 'XXXXX'
-db_password: 'XXXXXX'
-db_database: 'XXXXXX'
-db_host: 'XXXXXX'
+db_user: 'danil'
+db_password: 'mysqlDanil911password#!'
+db_database: 'danilnilne_db'
+db_host: 'docker.home.danilnilne.ru'
