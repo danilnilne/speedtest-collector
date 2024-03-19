@@ -3,6 +3,22 @@ import time
 import yaml
 import os
 from database import Database
+import logging
+
+# create logger
+logger = logging.getLogger(__file__)
+logger.setLevel(logging.DEBUG)
+# create console handler and set level to debug
+console_handler = logging.StreamHandler()
+console_handler.setLevel(logging.DEBUG)
+# create formatter
+formatter = logging.Formatter(
+    '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+# add formatter to ch
+console_handler.setFormatter(formatter)
+# add ch to logger
+logger.addHandler(console_handler)
+
 
 db_config: dict = {}
 DEFAULT_DELAY = 3600
@@ -84,17 +100,18 @@ def db_save_result(data, **db_config):
 
 if __name__ == "__main__":
 
+    logger.info('Starting...')
     config: Config = None
     try:
         config = Config('config.yml')
     except Exception as read_config_error:
-        print("Config read error: %s" % read_config_error)
+        logger.critical("Config read error: %s", read_config_error)
 
     for key, value in config.__dict__.items():
         if 'db_' in key:
             db_config.update({key.split('_')[1]: value})
         if value is None:
-            print('DB variable is empty: %s: %s' % (key, value))
+            logger.critical('DB variable is empty: %s: %s', key, value)
             exit(1)
 
     if not config.delay:
@@ -103,7 +120,7 @@ if __name__ == "__main__":
     try:
         speedcheck = Speedcheck()
     except Exception as speedcheck_init_error:
-        print("Exit due to: %s" % speedcheck_init_error)
+        logger.critical('Exit due to: %s', speedcheck_init_error)
         exit(1)
 
     while True:
@@ -111,7 +128,9 @@ if __name__ == "__main__":
             data = speedcheck.get_results('json')
             db_save_result(data, **db_config)
         except Exception as speedcheck_results:
-            print("Error while serving Speedtest results: %s"
-                  % speedcheck_results)
+            logger.critical('Error while serving Speedtest results: %s',
+                            speedcheck_results)
             exit(1)
+        logger.info('Collecting and saving completed. Waiting for %s seconds',
+                    config.delay)
         time.sleep(config.delay)
